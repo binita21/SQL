@@ -81,6 +81,3 @@ HAVING AVG(age)>40;
 
 
 
-
-
-
