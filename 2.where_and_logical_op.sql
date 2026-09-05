@@ -70,3 +70,41 @@ FROM employee_demographics
 WHERE  birth_date LIKE '1980%';
 
 
+-- IN operator
+-- IN operator is use to check if specified column's value matches any specified value within provided list or not
+-- OR tests multiple condition and can be used with different columns/conditions but IN test multiple values in same expression and is convenient for only one column. 
+
+-- select * FROM employee_demographics
+-- WHERE age > 40 OR gender = 'Female';
+
+
+SELECT * FROM employee_salary
+WHERE occupation = 'Office Manager' OR occupation='Entrepreneur';
+
+-- WE can optimize above code using IN as
+SELECT * FROM employee_salary
+WHERE occupation IN ( 'Office Manager', 'Entrepreneur');
+-- It will return records of those employees who are office MAnager or Entrepreneur. 
+
+SELECT first_name,last_name FROM employee_demographics
+WHERE birth_date IN ('1987-03-04','1994-03-27');
+
+-- BETWEEN Operator
+-- It is use to select the records within specified range , it is inclusive include both start and end range.
+
+SELECT * FROM employee_salary
+WHERE salary BETWEEN 50000 and 60000; -- IT will retrieve the records of those employee whose salary is between (>=50000) and (<=60000).  
+
+
+SELECT * FROM employee_salary
+WHERE salary NOT BETWEEN 50000 and 60000
+order by salary;  -- first selects records info where salary doesnot lies between 50000 and 60000  and then displays by ordering salary in asc order.
+
+-- EXISTS Operator
+-- EXISTS operator checks whether a subquery returns at least one row. 
+
+SELECT occupation FROM employee_salary
+WHERE EXISTS (
+SELECT first_name from employee_salary
+WHERE salary>50000 and first_name LIKE '%n%');
+
