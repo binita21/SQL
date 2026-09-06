@@ -58,9 +58,28 @@ WHERE salary > All(
     FROM employee_salary
     WHERE occupation = 'Manager'
 );
- 
+
+-- First it select age fro employee demographics where age < 45 then the age of employee_deographics table will be compared with all retrived ages before and if any age is greater than those all retrived ages then it will display the corresponding first_name and age.
+SELECT first_name,age
+FROM employee_demographics
+WHERE age > ALL(
+SELECT age
+from employee_demographics
+where age < 45) ;
+
+-- EXCEPT 
+-- IT helps to retrive all the records removing the one stated in the except query statement.
+
+SELECT first_name,salary
+FROM employee_salary EXCEPT 
+SELECT first_name,salary
+FROM employee_salary
+WHERE salary>50000;  -- This will retrive  first_name,salary except the reccords with salary greater than 50000.
+
+
 
  
+
  
  
  
