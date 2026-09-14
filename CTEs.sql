@@ -41,5 +41,5 @@ JOIN employee_salary sal
       ON dem.employee_id = sal.employee_id
 GROUP BY gender
 )
-SELECT *
+SELECT Avg_sal
 FROM CTE_Example; 
