@@ -76,9 +76,55 @@ ROW_NUMBER() OVER(
 PARTITION BY company,location,industry,total_laid_off,percentage_laid_off,`date`,stage,country,funds_raised_millions) as row_num
 FROM layoffs_staging;
 
-SET SQL_SAFE_UPDATES = 0;
 
-DELETE FROM layoffs_staging2
+-- deleting the rows where row_number is greater than 1.
+DELETE FROM layoffs_staging2 
 WHERE row_num > 1;
 
-SET SQL_SAFE_UPDATES = 1;
+
+
+-- Standardizing data
+
+SELECT company,TRIM(company) -- IT will select company and remove extra spaces from the company 
+FROM layoffs_staging2;
+
+UPDATE layoffs_staging2
+SET company = TRIM(company);  -- It will update the company column by removing whites spaces
+
+SELECT DISTINCT industry 
+FROM layoffs_staging2
+ORDER BY 1; -- It will sort by industry column
+
+SELECT *
+FROM layoffs_staging2
+WHERE industry like 'Crypto%';  -- select all records that starts with crypto
+
+UPDATE layoffs_staging2
+SET industry = 'Crypto'
+WHERE industry like 'Crypto%'; -- update the records that starts with Crypto  to Crypto.
+
+
+-- Select distinct country and trim any '.' if present on the trailing or right side of the records.
+SELECT DISTINCT country,TRIM(TRAILING '.' FROM country) 
+FROM layoffs_staging2
+ORDER BY 1;
+
+
+-- select everything that starts with United States
+SELECT * from layoffs_staging2
+where country like"United States%";
+
+-- uodate the country column records by trimming . present on the country record starting with united states  
+UPDATE layoffs_staging2
+SET country=TRIM(TRAILING '.' FROM country)
+WHERE country like "United States%";
+
+SELECT `date`,
+STR_TO_DATE(`date`,'%m/%d/%Y')  -- select date in format y-m-d
+from layoffs_staging2;
+
+UPDATE layoffs_staging2 -- update date to y-m-d format
+SET `date` = STR_TO_DATE(`date`,'%m/%d/%Y');
+
+ALTER TABLE layoffs_staging2 
+modify column `date` DATE;   -- changes the data type od date from text to date 
