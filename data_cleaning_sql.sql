@@ -127,4 +127,72 @@ UPDATE layoffs_staging2 -- update date to y-m-d format
 SET `date` = STR_TO_DATE(`date`,'%m/%d/%Y');
 
 ALTER TABLE layoffs_staging2 
-modify column `date` DATE;   -- changes the data type od date from text to date 
+modify column `date` DATE;   -- changes the data type od date from text to date
+
+-- DEALING WITH NULL OR BLANK VALUES
+ SELECT * FROM 
+ layoffs_staging2
+ WHERE total_laid_off is NULL
+ AND percentage_laid_off is NULL;
+ 
+ 
+ UPDATE layoffs_staging2
+ SET industry = null
+ WHERE industry = '';
+ 
+ 
+SELECT *
+FROM layoffs_staging2
+WHERE industry is NULL
+or industry = '';
+
+SELECT * from layoffs_staging2
+where company='Airbnb';
+
+
+SELECT t1.company,t1.industry,t2.company,t2.industry 
+from layoffs_staging2 t1
+JOIN layoffs_staging2 t2
+	ON t1.company=t2.company
+    AND t1.location=t2.location
+where (t1.industry IS NULL OR t1.industry = '')
+AND t2.industry IS NOT NULL;
+
+
+UPDATE layoffs_staging2 t1
+JOIN layoffs_staging2 t2
+	ON t1.company=t2.company
+SET t1.industry=t2.industry
+where (t1.industry IS NULL OR t1.industry = '')
+AND t2.industry IS NOT NULL;
+
+
+SELECT * FROM layoffs_staging2
+where industry IS NULL or industry='';
+
+
+SELECT * 
+FROM layoffs_staging2
+where company like "Bally's%";
+
+
+ SELECT * FROM 
+ layoffs_staging2
+ WHERE total_laid_off is NULL
+ AND percentage_laid_off is NULL;
+ 
+ 
+ DELETE FROM layoffs_staging2
+ WHERE total_laid_off is NULL
+ AND percentage_laid_off is NULL;
+ 
+ SELECT * FROM
+ layoffs_staging2;
+ 
+ 
+ ALTER TABLE layoffs_staging2
+ DROP column row_num;
+ 
+ 
+
+ 
