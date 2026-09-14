@@ -13,7 +13,7 @@ CALL large_salaries();
 DELIMITER $$
 USE `parks_and_recreation`$$
 
-CREATE PROCEDURE large_salaries2()
+/*CREATE PROCEDURE large_salaries2()
 BEGIN
 	SELECT * 
 	FROM employee_salary
@@ -22,7 +22,7 @@ BEGIN
 	FROM employee_salary
 	WHERE salary >= 10000;
 END $$
-DELIMITER ;
+DELIMITER ;*/
 
 
 -- PARAMETER
@@ -38,3 +38,5 @@ END $$
 DELIMITER ;
 
 CALL large_salaries4(1)
+
+
