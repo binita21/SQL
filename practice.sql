@@ -102,7 +102,20 @@ ORDER BY RIGHT(company,3) ,`date` ASC;
 -- Write a query that prints a list of employee names (i.e.: the name attribute) from the Employee table in alphabetical order.
 use parks_and_recreation;
 
+SELECT * FROM employee_salary;
 SELECT first_name
-FROM employee_demographics
+FROM employee_salary
 ORDER BY first_name ASC;
+
+-- Write a query that prints a list of employee names (i.e.: the name attribute) for employees in employee_salary having a salary greater than 50000 and dept_id > 3
+--  Sort your result by ascending employee_id.
+SELECT first_name
+FROM employee_salary
+WHERE salary > 50000 and dept_id > 3
+order by employee_id ASC;
+
+-- 1. Query an *alphabetically ordered* list of all names in **OCCUPATIONS**, immediately followed by the first letter of each profession as a parenthetical (i.e.: enclosed in parentheses). For example: `AnActorName(A)`, `ADoctorName(D)`, `AProfessorName(P)`, and `ASingerName(S)`.
+SELECT CONCAT(first_name, '(', LEFT(occupation, 1), ')')
+FROM employee_salary
+ORDER BY first_name;
 
