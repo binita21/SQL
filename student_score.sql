@@ -41,6 +41,11 @@ SELECT * FROM
 high_avg_score ;
 
 
+SELECT LEAST(
+   AVG(`Sql`),AVG(`Python`),AVG(`ML`),AVG(`Tableau`),AVG(`Excel`)
+) AS lowest_average
+FROM scores;
+
 
 
 
