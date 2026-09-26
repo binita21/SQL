@@ -119,3 +119,39 @@ SELECT CONCAT(first_name, '(', LEFT(occupation, 1), ')')
 FROM employee_salary
 ORDER BY first_name;
 
+use parks_and_recreation;
+SELECT *
+FROM employee_salary;
+
+
+-- Return first_name and last_name using friendly aliases.
+SELECT DISTINCT first_name AS `First Name`, last_name AS `Last Name`
+FROM employee_salary;
+
+-- Return employee names with bonus calculated as salary * 0.10.
+SELECT first_name,last_name,salary, salary*0.10 AS bonus
+FROM employee_salary;
+
+-- Return salary, last_name, and first_name in that exact left-to-right order.
+SELECT salary,last_name,first_name
+FROM employee_salary;
+
+-- Return first_name with a constant record_type value of Employee.
+SELECT first_name,
+ 'Employee' AS record_type
+FROM employee_salary;
+
+
+-- Return first_name, salary, and monthly_salary in this exact left-to-right order.; Calculate monthly_salary as salary divided by 12 and round it to 2 decimal places.
+SELECT first_name, salary, round(salary/12,2) AS monthly_salary
+FROM employee_salary;
+
+-- Return one column named result with the value 2.
+SELECT 1+1 as result;
+
+-- Return staff_id, first_name, last_name, record_type, projected_bonus, and projected_total_compensation in this exact left-to-right order.; Alias employee_id as staff_id and use the text literal Employee as record_type.; Calculate projected_bonus as 10 percent of salary, rounded to 2 decimal places.; Calculate projected_total_compensation as salary plus projected_bonus.
+SELECT employee_id AS staff_id, first_name,last_name,
+'Employee' AS record_type,
+salary*0.10 AS projected_bonus,
+round(salary * 1.10) AS projected_total_compensation
+FROM employee_salary;
