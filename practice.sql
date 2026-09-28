@@ -152,6 +152,21 @@ SELECT 1+1 as result;
 -- Return staff_id, first_name, last_name, record_type, projected_bonus, and projected_total_compensation in this exact left-to-right order.; Alias employee_id as staff_id and use the text literal Employee as record_type.; Calculate projected_bonus as 10 percent of salary, rounded to 2 decimal places.; Calculate projected_total_compensation as salary plus projected_bonus.
 SELECT employee_id AS staff_id, first_name,last_name,
 'Employee' AS record_type,
-salary*0.10 AS projected_bonus,
+round(salary*0.10,2) AS projected_bonus,
 round(salary * 1.10) AS projected_total_compensation
 FROM employee_salary;
+
+-- SELECT first_name, last_name, salary of the employee whose first name is Andy
+SELECT first_name,last_name,salary
+FROM employee_salary
+WHERE first_name='Andy';
+
+-- Find employees whoe occupation is either Entrepreneur or Office Manager.
+SELECT first_name, last_name, occupation
+FROM employee_salary
+WHERE occupation IN ('Entrepreneur','Office Manager');
+
+-- Find employees whose first name begins with J.
+SELECT first_name, last_name
+FROM employee_salary
+WHERE first_name LIKE 'J%';
