@@ -17,11 +17,14 @@ INSERT layoffs_staging
 SELECT *
 FROM layoffs;*/
 
-
+-- REMOVING DUPLICATES
 SELECT *,
 ROW_NUMBER() OVER(
 PARTITION BY company,industry,total_laid_off,percentage_laid_off,`date`) as row_num
-FROM layoffs_staging;
+FROM layoffs_staging; 
+
+
+-- HERE,the partition is done for all the columns and the row_num will be 1 for the first row and 2 for the duplicate row. So we can filter out the rows with row_num>1 to remove duplicates.
 
 
 WITH duplicate_cte AS
@@ -76,132 +79,9 @@ ROW_NUMBER() OVER(
 PARTITION BY company,location,industry,total_laid_off,percentage_laid_off,`date`,stage,country,funds_raised_millions) as row_num
 FROM layoffs_staging;
 
+SET SQL_SAFE_UPDATES = 0;
 
--- deleting the rows where row_number is greater than 1.
-DELETE FROM layoffs_staging2 
+DELETE FROM layoffs_staging2
 WHERE row_num > 1;
 
-
-
--- Standardizing data
-
-SELECT company,TRIM(company) -- IT will select company and remove extra spaces from the company 
-FROM layoffs_staging2;
-
-UPDATE layoffs_staging2
-SET company = TRIM(company);  -- It will update the company column by removing whites spaces
-
-SELECT DISTINCT industry 
-FROM layoffs_staging2
-ORDER BY 1; -- It will sort by industry column
-
-SELECT *
-FROM layoffs_staging2
-WHERE industry like 'Crypto%';  -- select all records that starts with crypto
-
-UPDATE layoffs_staging2
-SET industry = 'Crypto'
-WHERE industry like 'Crypto%'; -- update the records that starts with Crypto  to Crypto.
-
-
--- Select distinct country and trim any '.' if present on the trailing or right side of the records.
-SELECT DISTINCT country,TRIM(TRAILING '.' FROM country) 
-FROM layoffs_staging2
-ORDER BY 1;
-
-
--- select everything that starts with United States
-SELECT * from layoffs_staging2
-where country like"United States%";
-
--- uodate the country column records by trimming . present on the country record starting with united states  
-UPDATE layoffs_staging2
-SET country=TRIM(TRAILING '.' FROM country)
-WHERE country like "United States%";
-
-SELECT `date`,
-STR_TO_DATE(`date`,'%m/%d/%Y')  -- select date in format y-m-d
-from layoffs_staging2;
-
-UPDATE layoffs_staging2 -- update date to y-m-d format
-SET `date` = STR_TO_DATE(`date`,'%m/%d/%Y');
-
-ALTER TABLE layoffs_staging2 
-modify column `date` DATE;   -- changes the data type od date from text to date
-
--- DEALING WITH NULL OR BLANK VALUES
- SELECT * FROM 
- layoffs_staging2
- WHERE total_laid_off is NULL
- AND percentage_laid_off is NULL;
- 
- 
- UPDATE layoffs_staging2
- SET industry = null
- WHERE industry = '';
- 
- 
-SELECT *
-FROM layoffs_staging2
-WHERE industry is NULL
-or industry = '';
-
-SELECT * from layoffs_staging2
-where company='Airbnb';
-
-
-SELECT t1.company,t1.industry,t2.company,t2.industry 
-from layoffs_staging2 t1
-JOIN layoffs_staging2 t2
-	ON t1.company=t2.company
-    AND t1.location=t2.location
-where (t1.industry IS NULL OR t1.industry = '')
-AND t2.industry IS NOT NULL;
-
-
-UPDATE layoffs_staging2 t1
-JOIN layoffs_staging2 t2
-	ON t1.company=t2.company
-SET t1.industry=t2.industry
-where (t1.industry IS NULL OR t1.industry = '')
-AND t2.industry IS NOT NULL;
-
-
-SELECT * FROM layoffs_staging2
-where industry IS NULL or industry='';
-
-
-SELECT * 
-FROM layoffs_staging2
-where company like "Bally's%";
-
-
- SELECT * FROM 
- layoffs_staging2
- WHERE total_laid_off is NULL
- AND percentage_laid_off is NULL;
- 
- 
- DELETE FROM layoffs_staging2
- WHERE total_laid_off is NULL
- AND percentage_laid_off is NULL;
- 
- SELECT * FROM
- layoffs_staging2;
- 
- 
- ALTER TABLE layoffs_staging2
- DROP column row_num;
- 
- /*SELECT
-    CASE
-        WHEN A + B <= C OR A + C <= B OR B + C <= A
-            THEN 'Not A Triangle'
-        WHEN A = B AND B = C
-            THEN 'Equilateral'
-        WHEN A = B OR B = C OR A = C
-            THEN 'Isosceles'
-        ELSE 'Scalene'
-    END
-FROM TRIANGLES;*/
-
+SET SQL_SAFE_UPDATES = 1;
