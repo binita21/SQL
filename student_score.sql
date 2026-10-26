@@ -3,20 +3,20 @@ show tables;
 SELECT * 
 FROM scores;
 
+-- Total number of students
+SELECT COUNT(*) 
+AS total_students
+FROM scores;
+
 
 -- ALTER TABLE scores 
 -- RENAME column `Student Placed` TO student_placed;
 
+
+-- Scores of students who got placed.
 SELECT * 
 FROM scores
-WHERE `Student Placed` = 'Yes'; -- Student who got placed.
-
-
-
--- Total number of students
-SELECT COUNT(*) 
-AS total_records
-FROM scores;
+WHERE `Student Placed` = 'Yes';
 
 
 -- What is the average score in SQL?
@@ -36,7 +36,7 @@ SELECT round( AVG(`Tableau`),2 )as avg_score_in_Tableau
 FROM scores;
 
 
--- 
+-- Average scores in sql,python,ml,tableau and excel
 WITH avg_score AS
 (
 SELECT round(AVG(`Sql`),2) as sql_avg_score,
@@ -105,3 +105,13 @@ SELECT COUNT(*)
 AS `Placed_student`
 FROM scores
 WHERE `Student Placed`='Yes';
+
+WITH avg_scores as (
+SELECT 
+round(AVG(`Sql`),2) avg_sql,round(AVG(`Python`),2) avg_python,round(AVG(`ML`),2) avg_ml,round(AVG(`Tableau`),2) avg_tableau,round(AVG(`Excel`),2) avg_excel
+FROM scores
+WHERE `Student Placed` = 'Yes')
+SELECT * 
+from avg_scores 
+WHERE `avg_scores` > 0.8;
+
