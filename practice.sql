@@ -190,13 +190,30 @@ LEFT JOIN
 employee_salary as em
 ON e.employee_id = em.employee_id;
 
-SELECT occupation, SUM(salary)
+--  If the output data in any column is null replace with 0.
+SELECT
+    e.employee_id,
+    e.first_name,
+    COALESCE(SUM(em.salary), 0) AS total_amount
+FROM employee_demographics e
+LEFT JOIN employee_salary  em
+    ON e.employee_id= em.employee_id
+GROUP BY e.employee_id, e.first_name;
+
+-- A company wants a report showing each department's total salary, considering only employees earning more than 25,000. 
+-- Display only departments whose total salary exceeds 100,000 and department is not null.
+SELECT dept_id,SUM(salary) as total_salary
 FROM employee_salary
-GROUP BY occupation;
+WHERE salary>25000
+GROUP BY dept_id
+HAVING total_salary>100000 and dept_id IS NOT NULL;
+
+-- What if we want to show all employees, including those without salary, but only match salary with an amount greater than 500?
+SELECT e.birth_date, em.salary
+FROM employee_demographics e
+LEFT JOIN employee_salary em
+    ON e.employee_id = em.employee_id
+    AND em.salary>50000;
 
 
-SELECT occupation, COUNT(*) as occ_count FROM employee_salary
-GROUP BY occupation;
 
-
-SELECT occupation,AVG(salary) FROM employee_salary GROUP BY occupation;
