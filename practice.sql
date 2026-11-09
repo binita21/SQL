@@ -215,5 +215,7 @@ LEFT JOIN employee_salary em
     ON e.employee_id = em.employee_id
     AND em.salary>50000;
 
-
+SELECT first_name,occupation,salary,AVG(salary) OVER (
+partition by occupation) AS avg_salary
+FROM employee_salary;
 
