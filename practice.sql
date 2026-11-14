@@ -219,3 +219,10 @@ SELECT first_name,occupation,salary,AVG(salary) OVER (
 partition by occupation) AS avg_salary
 FROM employee_salary;
 
+-- Report for every three line segments whether they can form a triangle.
+-- Return the result table in any order.
+
+SELECT x,y,z,
+CASE 
+WHEN z < (x+y) AND x<(y+z) AND y<(x+z) THEN 'Yes' ELSE 'No' END as triangle
+FROM Triangle;
